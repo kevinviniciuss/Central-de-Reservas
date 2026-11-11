@@ -1,11 +1,3 @@
-"""main.py - Central de Reservas (setor ProTec): menu e fluxo do programa.
-
-Roda com:  python main.py
-Cada acao limpa a tela e leva ao que foi pedido (ou ao proximo passo). Junta os
-modulos: tads (Fila/Pilha), arvore (BST/AVL), carga (base e datas), relatorio
-(tabelas) e visual (cores e tela).
-"""
-
 import os
 import sys
 
@@ -13,12 +5,12 @@ import visual as v
 from tads import Fila, Pilha
 from heap import Heap
 from carga import (carregar_reservas, gravar_reservas, carregar_na_arvore,
-                   para_minutos, rotulo, hora, prioridade, PRIORIDADES)
+                   carregar_na_arvoreb, GRAU_B, para_minutos, rotulo, hora, prioridade, PRIORIDADES)
 import relatorio
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
 BASE = os.path.join(PASTA, "reservas_protec.json")
-DURACAO_PADRAO = 60   # minutos, para reservas sem hora de fim na base (marcado com '?')
+DURACAO_PADRAO = 60   
 FORMATO = "dd/mm/aaaa hh:mm"
 
 try:
@@ -31,14 +23,14 @@ class Sistema:
     def __init__(self):
         self.setor = "ProTec"
         self.base = {}
-        self.reservas = []          # ordem cronologica; e a lista da "varredura"
+        self.reservas = []          
         self.bst = carregar_na_arvore([], False)
         self.avl = carregar_na_arvore([], True)
-        self.historico = Pilha()    # pilha do "desfazer"
-        self.espera = []            # pedidos na lista de espera, em ordem de chegada
+        self.arvb = carregar_na_arvoreb([])   
+        self.historico = Pilha()    
+        self.espera = []            
         self.sujo = False
 
-    # ----------------------------------------------------------- base
     def carregar(self):
         self.reservas, self.base = carregar_reservas(BASE)
         self.setor = self.base.get("setor", self.setor)
@@ -50,13 +42,13 @@ class Sistema:
     def reconstruir(self):
         self.bst = carregar_na_arvore(self.reservas, balanceada=False)
         self.avl = carregar_na_arvore(self.reservas, balanceada=True)
+        self.arvb = carregar_na_arvoreb(self.reservas)
 
     def salvar(self):
         gravar_reservas(BASE, self.base, self.reservas)
         self.sujo = False
 
     def recursos(self):
-        """Lista (codigo, local) distintos, na ordem em que aparecem."""
         vistos, saida = [], []
         for r in self.reservas:
             if r["recurso"] not in vistos:
@@ -75,8 +67,6 @@ class Sistema:
         return r["fim"] if r["fim"] is not None else r["inicio"] + DURACAO_PADRAO
 
     def conflitos(self, recurso, ini, fim):
-        """Reservas do recurso que se sobrepoem a [ini, fim). Usa a AVL: reservas que
-        comecaram ate `maior_duracao` antes de `ini` ainda podem estar em andamento."""
         candidatas, visitados = self.avl.faixa(ini - self.maior_duracao(), fim)
         achadas = []
         for r in candidatas:
@@ -103,7 +93,6 @@ class Sistema:
                 return v.cor_recurso(c, "%s · %s" % (c, local))
         return cod
 
-    # ------------------------------------------------------ lista de espera
     def reserva_por_id(self, id_):
         for r in self.reservas:
             if r["id"] == id_:
@@ -120,7 +109,6 @@ class Sistema:
         self.espera = [r for r in self.espera if r["id"] != id_]
 
     def ordem_fifo(self):
-        """Versao 1: Fila FIFO. Devolve (ordem de saida, operacoes da fila)."""
         fila = Fila()
         for r in self.espera:
             fila.enfileirar(r)
@@ -130,8 +118,6 @@ class Sistema:
         return ordem, fila.operacoes
 
     def ordem_heap(self):
-        """Versao 2: Heap de prioridade, chave (prioridade, id) - o id desempata pela
-        ordem de chegada. Devolve (ordem de saida, comparacoes, trocas)."""
         h = Heap()
         for r in self.espera:
             h.inserir((prioridade(r), r["id"]), r)
@@ -141,9 +127,6 @@ class Sistema:
         return ordem, h.comparacoes, h.trocas
 
     def disputas_da_base(self, mesmo_recurso=True):
-        """Pedidos que se sobrepoem no tempo a um pedido de id menor (que chegou
-        antes). mesmo_recurso=True: so no mesmo recurso; False: em qualquer recurso
-        (a equipe do ProTec e uma so). Usa a AVL (faixa) para achar os candidatos."""
         saida = []
         folga = self.maior_duracao()
         for r in self.reservas:
@@ -156,11 +139,7 @@ class Sistema:
                     break
         return saida
 
-
-
-# ------------------------------------------------------------- auxiliares
-VOLTAR = object()   # sinal: o usuario digitou "0" (voltar um passo)
-
+VOLTAR = object()   
 
 def tela(sis, titulo, passo=None, total=None, resumo=None, destino1="ao menu"):
     v.cabecalho(titulo, sis.setor, passo, total)
@@ -183,7 +162,6 @@ def tabela_reservas(rs):
 
 
 def pedir_instante(rotulo_campo):
-    """Devolve minutos, None (vazio = cancelar) ou VOLTAR ("0")."""
     while True:
         txt = v.ler(rotulo_campo, FORMATO + " · 0 volta")
         if txt == "0":
@@ -197,7 +175,6 @@ def pedir_instante(rotulo_campo):
 
 
 def escolher_recurso(sis):
-    """Devolve o codigo, None (vazio = cancelar) ou VOLTAR ("0")."""
     recs = sis.recursos()
     v.tabela(["nº", "código", "local"],
              [[v.c(i, "bold", "ouro"), v.cor_recurso(c), v.cor_recurso(c, local)] for i, (c, local) in enumerate(recs, 1)], ["r", "l", "l"])
@@ -214,10 +191,6 @@ def escolher_recurso(sis):
 
 
 def percorrer(passos):
-    """Executa os passos de um fluxo, permitindo voltar com "0".
-    Cada passo e uma funcao f(valores_anteriores) que devolve o valor escolhido,
-    None (cancelar) ou VOLTAR. Devolve a lista de valores, None se cancelou,
-    ou VOLTAR se o usuario voltou do primeiro passo (= voltar ao menu)."""
     valores = []
     i = 0
     while i < len(passos):
@@ -239,8 +212,6 @@ def cancelado(sis):
     v.aviso("Cancelado. Voltando ao menu…")
     v.pausa()
 
-
-# ------------------------------------------------------------------ opcoes
 def op_carregar(sis):
     tela(sis, "Carregar base de campo")
     sis.carregar()
@@ -310,7 +281,7 @@ def op_registrar(sis):
             if r == "s":
                 return "em_espera"
             if r == "n":
-                return None   # pedido nao registrado (cancelado)
+                return None   
             v.erro("Digite s, n ou 0 para voltar.")
 
     vals = percorrer([p_rec, p_ini, p_fim, p_desc, p_conflito])
@@ -329,6 +300,7 @@ def op_registrar(sis):
     sis.inserir_ordenado(nova)
     sis.bst.inserir(ini, nova)
     sis.avl.inserir(ini, nova)
+    sis.arvb.inserir(ini, nova)
     sis.historico.empilhar(nova["id"])
     if status == "em_espera":
         sis.espera.append(nova)
@@ -448,8 +420,6 @@ def op_disponibilidade(sis):
     v.info("AVL visitou %s nós. Reservas sem hora de fim contam %d min." % (v.c(visitados, "bold", "branco"), DURACAO_PADRAO))
     v.pausa()
 
-
-# ------------------------------------------------------- lista de espera
 def _cel_pedido(r, larg=24):
     return "%s %s %s" % (v.c("#%d" % r["id"], "muted"), v.c("P%d" % prioridade(r), "bold", "ouro"),
                          v.cortar(r["descricao"], larg))
@@ -653,6 +623,72 @@ def op_desfazer(sis):
     v.pausa()
 
 
+def op_indice_disco(sis):
+    T = "Índice em disco do histórico"
+    msg = None
+    while True:
+        tela(sis, T)
+        b = sis.arvb
+        v.info("Árvore B de grau mínimo %d (até %d chaves por página) · %s chaves · %s páginas · altura %s" % (
+            b.t, 2 * b.t - 1, v.c(b.n_chaves, "bold", "branco"), v.c(b.n_paginas, "bold", "branco"),
+            v.c(b.altura(), "bold", "branco")))
+        v.info("Ocupação média das páginas: %.0f%% · coerente: %s" % (
+            b.ocupacao(), "✔ sim" if b.coerente() else "✖ não"))
+        print()
+        for cod, txt in (("1", "Buscar um instante exato"), ("2", "Consultar uma faixa de horário"),
+                         ("3", "Comparar com a AVL (páginas lidas × nós visitados)"), ("0", "Voltar ao menu")):
+            print("  " + v.c(cod, "bold", "ouro") + "  " + v.c(txt, "branco"))
+        print()
+        if msg:
+            v.erro(msg)
+            msg = None
+        esc = v.ler("Opção")
+        if esc == "0":
+            return
+        if esc == "1":
+            ini = pedir_instante("Instante")
+            if ini is None or ini is VOLTAR:
+                continue
+            achadas, lidas = b.buscar(ini)
+            _, nos = sis.avl.buscar(ini)
+            tela(sis, T, resumo=[("Instante", rotulo(ini))])
+            if achadas:
+                tabela_reservas(achadas)
+            else:
+                v.aviso("Nenhuma reserva começa nesse instante.")
+            print()
+            v.info("Árvore B leu %s páginas · AVL visitou %s nós" % (
+                v.c(lidas, "bold", "branco"), v.c(nos, "bold", "branco")))
+            v.pausa()
+        elif esc == "2":
+            ini = pedir_instante("De")
+            if ini is None or ini is VOLTAR:
+                continue
+            fim = pedir_instante("Até")
+            if fim is None or fim is VOLTAR:
+                continue
+            if fim < ini:
+                msg = "O fim vem antes do início."
+                continue
+            achadas, lidas = b.faixa(ini, fim)
+            _, nos = sis.avl.faixa(ini, fim)
+            tela(sis, T, resumo=[("Faixa", "%s  →  %s" % (rotulo(ini), rotulo(fim)))])
+            if achadas:
+                tabela_reservas(achadas)
+            else:
+                v.aviso("Nenhuma reserva começa nessa faixa.")
+            print()
+            v.info("%s reservas · árvore B leu %s páginas · AVL visitou %s nós" % (
+                v.c(len(achadas), "bold", "branco"), v.c(lidas, "bold", "branco"), v.c(nos, "bold", "branco")))
+            v.pausa()
+        elif esc == "3":
+            tela(sis, "Árvore B × AVL")
+            relatorio.mostrar_a3(sis.reservas, sis.avl)
+            v.pausa()
+        else:
+            msg = "Opção inválida. Digite 0, 1, 2 ou 3."
+
+
 def op_desempenho(sis):
     tela(sis, "Desempenho das estruturas")
     relatorio.mostrar_relatorio(sis.reservas, sis.bst, sis.avl)
@@ -677,8 +713,6 @@ def em_breve(titulo, texto):
         v.pausa()
     return f
 
-
-# (codigo, texto, detalhe, etapa-futura-ou-None, funcao)
 MENU = [
     ("1", "Carregar base de campo", "reservas_protec.json", None, op_carregar),
     ("2", "Cadastrar / editar / remover recurso", "", "cadastro.py",
@@ -688,9 +722,8 @@ MENU = [
     ("5", "Consultar disponibilidade de um recurso", "", None, op_disponibilidade),
     ("6", "Lista de espera", "Fila FIFO · Heap", None, op_espera),
     ("7", "Desfazer a última operação", "Pilha", None, op_desfazer),
-    ("8", "Índice em disco do histórico", "árvore B", "E4 · 11/11",
-     em_breve("Índice em disco", "arvoreb.py entra na E4 (11/11).")),
-    ("9", "Relatório de desempenho das estruturas", "achados A1 · A2 · A4", None, op_desempenho),
+    ("8", "Índice em disco do histórico", "árvore B", None, op_indice_disco),
+    ("9", "Relatório de desempenho das estruturas", "achados A1 · A2 · A3 · A4", None, op_desempenho),
     ("10", "Conflito de deslocamento", "extensão B", "opcional",
      em_breve("Conflito de deslocamento", "Trilha B (trajetoria.py) ainda não iniciada.")),
     ("11", "Gravar relatório em arquivo", "relatorio.txt", None, op_gravar),

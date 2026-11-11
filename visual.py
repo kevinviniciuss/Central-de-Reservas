@@ -1,14 +1,3 @@
-"""visual.py - cores, limpeza de tela e componentes de terminal (so biblioteca padrao).
-
-Paleta unica para o programa inteiro:
-  azul   = identidade (barra do topo, cabecalhos de tabela)
-  ouro   = destaque e navegacao (titulos, numeros do menu, prompt)
-  BST    = laranja      AVL = verde-agua      (as duas estruturas sempre nessas cores)
-  ok / aviso / erro = verde / amarelo / vermelho
-Cores e limpeza de tela so ficam ativas em terminal de verdade (ou com FORCAR_COR=1).
-NO_COLOR=1 desliga as cores.
-"""
-
 import os
 import re
 import sys
@@ -41,7 +30,6 @@ CODIGOS = {
 
 
 def c(texto, *estilos):
-    """Pinta um trecho. Nao aninhar: cada trecho pintado termina com reset."""
     if not ATIVO:
         return str(texto)
     cod = ";".join(CODIGOS[e] for e in estilos)
@@ -49,7 +37,6 @@ def c(texto, *estilos):
 
 
 def cor_recurso(codigo, texto=None):
-    """Pinta um recurso com a cor fixa do seu auditorio (codigo desconhecido -> branco)."""
     chave = "rec_" + codigo
     return c(texto if texto is not None else codigo, chave if chave in CODIGOS else "branco")
 
@@ -77,7 +64,6 @@ def largura():
     return max(60, min(cols, 90))
 
 
-# --------------------------------------------------------------- tela
 def limpar():
     if _TTY:
         sys.stdout.write("\x1b[H\x1b[2J")
@@ -87,7 +73,6 @@ def limpar():
 
 
 def cabecalho(titulo, setor, passo=None, total=None):
-    """Limpa a tela e desenha: barra azul do sistema + titulo da tela (+ passo)."""
     limpar()
     w = largura()
     esq = "  ◆ CENTRAL DE RESERVAS"
@@ -101,9 +86,8 @@ def cabecalho(titulo, setor, passo=None, total=None):
 
 
 def resumo(pares):
-    """Mostra o que ja foi escolhido nos passos anteriores."""
     for rotulo, valor in pares:
-        if "\x1b" not in str(valor):   # valor ja pintado (ex.: recurso) fica como veio
+        if "\x1b" not in str(valor):   
             valor = c(valor, "branco")
         print("  " + c(ajustar(rotulo, 10), "muted") + valor)
     print()
@@ -157,11 +141,7 @@ def pausa():
         print()
         raise SystemExit(0)
 
-
-# ----------------------------------------------------------- componentes
 def tabela(cabs, linhas, alinhs=None, recuo=2):
-    """cabs: lista de textos; linhas: lista de listas (celulas podem ter cor);
-    alinhs: 'l' ou 'r' por coluna."""
     alinhs = alinhs or ["l"] * len(cabs)
     larg = [len(h) for h in cabs]
     for lin in linhas:
@@ -190,7 +170,6 @@ def etiqueta_arv(nome):
 
 
 if __name__ == "__main__":
-    # Teste rapido do terminal:  python visual.py
     print()
     print("  Teste de cores dos auditorios")
     print()

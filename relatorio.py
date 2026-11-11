@@ -1,13 +1,6 @@
-"""relatorio.py - tabelas de desempenho das estruturas, em tela colorida e em texto.
-
-Nesta etapa (E3) cobre os achados A1, A2 e A4. Os demais entram nas proximas entregas.
-Os numeros saem todos dos contadores das estruturas (dados()); tela e arquivo so
-formatam o mesmo resultado.
-"""
-
 import math
 import visual as v
-from carga import carregar_na_arvore, rotulo, prioridade
+from carga import carregar_na_arvore, carregar_na_arvoreb, rotulo, prioridade
 from heap import heapsort, k_menores_com_heap
 
 
@@ -25,7 +18,6 @@ def medir(reservas, balanceada):
 
 
 def tabela_a1(reservas):
-    """Primeira tabela do A1: carga cronologica em 1/3, 2/3 e total."""
     n = len(reservas)
     linhas = []
     for nome, k in (("1/3", n // 3), ("2/3", 2 * n // 3), ("total", n)):
@@ -39,7 +31,6 @@ def tabela_a1(reservas):
 
 
 def tabela_a2(reservas, bst, avl):
-    """A2: nos visitados na consulta por faixa (BST, AVL e varredura da lista)."""
     ultimo = reservas[-1]["inicio"] // 1440
     contagem = [0] * (ultimo + 1)
     for r in reservas:
@@ -68,9 +59,6 @@ def tabela_a2(reservas, bst, avl):
 
 
 def tabela_a4(reservas):
-    """A4: ordenar tudo com heapsort x extrair so os k primeiros com o heap, e quem
-    sai primeiro pela Fila FIFO x pelo Heap (todas as reservas tratadas como pedidos
-    em espera; chave do heap = (prioridade, id), o id e a ordem de chegada)."""
     itens = [((prioridade(r), r["id"]), r) for r in reservas]
     chave = lambda it: it[0]
     _, comp_todos, _ = heapsort(itens, chave)
@@ -87,6 +75,47 @@ def tabela_a4(reservas):
     return {"n": len(itens), "linhas": linhas, "todos": comp_todos,
             "fifo": (primeiro_fifo["id"], prioridade(primeiro_fifo), primeiro_fifo["descricao"]),
             "heap": (primeiro_heap["id"], prioridade(primeiro_heap), primeiro_heap["descricao"])}
+
+
+def tabela_a3(reservas, avl):
+    chaves = [c for c, _ in avl.em_ordem_com_pilha()]
+    contagem = {}
+    for rv in reservas:
+        d = rv["inicio"] // 1440
+        contagem[d] = contagem.get(d, 0) + 1
+    cheio = None
+    for d in contagem:
+        if cheio is None or contagem[d] > contagem[cheio]:
+            cheio = d
+    f_dia = (cheio * 1440, cheio * 1440 + 1439)
+    f_tudo = (0, chaves[-1])
+    _, nos_dia = avl.faixa(*f_dia)
+    _, nos_tudo = avl.faixa(*f_tudo)
+    linhas = [("AVL", "-", avl.altura(), avl.n_nos, avl.caminho_medio(), nos_dia, nos_tudo, None, None)]
+    for t in (2, 3, 5, 10):
+        b = carregar_na_arvoreb(reservas, t)
+        soma = 0
+        for ch in chaves:
+            soma += b.buscar(ch)[1]
+        _, p_dia = b.faixa(*f_dia)
+        _, p_tudo = b.faixa(*f_tudo)
+        linhas.append(("B", t, b.altura(), b.n_paginas, soma / len(chaves), p_dia, p_tudo,
+                       b.escritas, b.coerente()))
+    return linhas
+
+
+def mostrar_a3(reservas, avl):
+    linhas = tabela_a3(reservas, avl)
+    v.secao("Achado A3 · índice em disco (leituras de página)")
+    maxl = max(l[4] for l in linhas)
+    v.tabela(["estrutura", "t", "altura", "páginas", "leit./busca", "", "faixa dia", "faixa base"],
+             [[v.etiqueta_arv("AVL") if e == "AVL" else v.c("B", "bold", "ouro"), t, alt, pg, "%.2f" % med,
+               v.barra(med, maxl, 10, "avl" if e == "AVL" else "ouro"), fd, ft]
+              for e, t, alt, pg, med, fd, ft, _, _ in linhas],
+             ["l", "r", "r", "r", "r", "l", "r", "r"])
+    print()
+    v.info("AVL: 1 nó = 1 página. Árvore B: cada página guarda até 2t-1 chaves.")
+    v.info("Menos níveis = menos leituras de disco por consulta.")
 
 
 def dados(reservas, bst, avl):
@@ -107,11 +136,9 @@ def dados(reservas, bst, avl):
         "niveis_bst": [len(x) for x in bst.em_largura_com_fila()],
         "niveis_avl": [len(x) for x in avl.em_largura_com_fila()],
         "a1": tabela_a1(reservas), "busca": busca,
-        "a2": tabela_a2(reservas, bst, avl), "a4": tabela_a4(reservas),
+        "a2": tabela_a2(reservas, bst, avl), "a3": tabela_a3(reservas, avl), "a4": tabela_a4(reservas),
     }
 
-
-# ---------------------------------------------------------------- arquivo
 def texto_relatorio(setor, reservas, bst, avl):
     d = dados(reservas, bst, avl)
     L = ["CENTRAL DE RESERVAS - setor %s" % setor, "=" * 60]
@@ -140,6 +167,10 @@ def texto_relatorio(setor, reservas, bst, avl):
           "%-22s %-10s %9s %5s %5s %10s" % ("faixa", "a partir de", "achadas", "BST", "AVL", "varredura")]
     for nome, ini, n, nb, na, nv in d["a2"]:
         L.append("%-22s %-10s %9d %5d %5d %10d" % (nome, ini, n, nb, na, nv))
+    L += ["", "ACHADO A3 - ÍNDICE EM DISCO (leituras de página; AVL: 1 nó = 1 página)",
+          "%-5s %3s %7s %8s %12s %10s %11s" % ("estr.", "t", "altura", "páginas", "leit./busca", "faixa dia", "faixa base")]
+    for e, t, alt, pg, med, fd, ft, _, _ in d["a3"]:
+        L.append("%-5s %3s %7d %8d %12.2f %10d %11d" % (e, t, alt, pg, med, fd, ft))
     a4 = d["a4"]
     L += ["", "ACHADO A4 - PRIORIDADE (comparações; %d pedidos)" % a4["n"],
           "%-4s %16s %20s %8s" % ("k", "heap (k menores)", "heapsort (ordena tudo)", "heap/tudo")]
@@ -149,8 +180,6 @@ def texto_relatorio(setor, reservas, bst, avl):
     L.append("Primeiro a sair - Heap:      #%d (prioridade %d) %s" % a4["heap"])
     return "\n".join(L)
 
-
-# ------------------------------------------------------------------- tela
 def _sim(b):
     return v.c("✔ sim", "ok") if b else v.c("✖ não", "erro")
 
@@ -205,6 +234,8 @@ def mostrar_relatorio(reservas, bst, avl):
              [[nome, ini, n, v.c(nb, "bst"), v.c(na, "avl"), nv, v.barra(na, maxv, 10, "avl")]
               for nome, ini, n, nb, na, nv in d["a2"]],
              ["l", "l", "r", "r", "r", "r", "l"])
+
+    mostrar_a3(reservas, avl)
 
     a4 = d["a4"]
     v.secao("Achado A4 · prioridade (comparações, %d pedidos)" % a4["n"])

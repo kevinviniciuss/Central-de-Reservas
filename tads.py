@@ -1,11 +1,3 @@
-"""tads.py - Fila e Pilha com no encadeado.
-
-Todas as operacoes principais sao O(1). Nao usa list.pop(0), deque nem list.pop():
-a fila guarda ponteiros para o primeiro e o ultimo no, a pilha guarda o topo.
-Ambas contam `operacoes` (cada enfileirar/desenfileirar/empilhar/desempilhar).
-"""
-
-
 class _No:
     __slots__ = ("valor", "prox")
 
@@ -15,11 +7,9 @@ class _No:
 
 
 class Fila:
-    """FIFO: o primeiro a entrar e o primeiro a sair."""
-
     def __init__(self):
-        self._inicio = None   # proximo a sair
-        self._fim = None      # ultimo a entrar
+        self._inicio = None   
+        self._fim = None      
         self._tamanho = 0
         self.operacoes = 0
 
@@ -57,8 +47,6 @@ class Fila:
 
 
 class Pilha:
-    """LIFO: o ultimo a entrar e o primeiro a sair."""
-
     def __init__(self):
         self._topo = None
         self._tamanho = 0

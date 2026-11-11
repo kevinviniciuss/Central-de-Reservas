@@ -1,25 +1,11 @@
-"""heap.py - min-heap em array, heapsort e k menores com heap.
-
-Itens do heap: pares (chave, carga). A chave e comparada com `<` (inteiro ou tupla;
-tupla compara campo a campo, o que permite desempate: (prioridade, id)).
-O menor ficar na raiz: indice 0. Pai de i = (i-1)//2; filhos = 2i+1 e 2i+2.
-
-Convencoes de contagem (valem para Heap, heapsort e k_menores_com_heap):
-  * comparacoes: 1 por comparacao entre duas chaves.
-  * trocas: 1 por troca de duas posicoes do array.
-Nao usa heapq nem sorted() fora das funcoes de verificacao (final do arquivo).
-"""
-
-
 class Heap:
     def __init__(self):
-        self._v = []          # array; so as posicoes 0.._n-1 valem
+        self._v = []          
         self._n = 0
         self.comparacoes = 0
         self.trocas = 0
-        self.operacoes = 0    # inserir + remover_topo
+        self.operacoes = 0    
 
-    # ---------------------------------------------------------- basicas
     def tamanho(self):
         return self._n
 
@@ -36,7 +22,6 @@ class Heap:
         self.trocas += 1
 
     def _subir(self, i):
-        """heapify na subida: o no i sobe enquanto for menor que o pai."""
         v = self._v
         while i > 0:
             pai = (i - 1) // 2
@@ -48,7 +33,6 @@ class Heap:
                 break
 
     def _descer(self, i):
-        """heapify na descida: o no i desce enquanto for maior que algum filho."""
         v = self._v
         n = self._n
         while True:
@@ -68,7 +52,6 @@ class Heap:
             else:
                 break
 
-    # --------------------------------------------------------- operacoes
     def inserir(self, chave, carga):
         self.operacoes += 1
         item = (chave, carga)
@@ -80,7 +63,6 @@ class Heap:
         self._subir(self._n - 1)
 
     def remover_topo(self):
-        """Devolve (chave, carga) do menor. Heap vazio -> IndexError."""
         if self._n == 0:
             raise IndexError("heap vazio")
         self.operacoes += 1
@@ -95,17 +77,12 @@ class Heap:
         return raiz
 
     def construir(self, itens):
-        """Monta o heap de uma vez (heapify de baixo para cima, O(n)).
-        `itens` e uma sequencia de pares (chave, carga)."""
         self._v = [it for it in itens]
         self._n = len(self._v)
         for i in range(self._n // 2 - 1, -1, -1):
             self._descer(i)
 
-    # ---------------------------------------------------------- invariante
     def coerente(self):
-        """True se a propriedade de min-heap vale em todo no (pai <= filho) e nao ha
-        posicao vazia dentro do tamanho. Nao mexe nos contadores."""
         for i in range(self._n):
             if self._v[i] is None:
                 return False
@@ -113,10 +90,7 @@ class Heap:
                 return False
         return True
 
-
-# ------------------------------------------------------------------ heapsort
 def _descer_max(a, i, n, kf, cont):
-    """Desce o no i de um MAX-heap em a[0:n]. cont = [comparacoes, trocas]."""
     while True:
         esq = 2 * i + 1
         if esq >= n:
@@ -137,16 +111,13 @@ def _descer_max(a, i, n, kf, cont):
 
 
 def heapsort(itens, chave=None):
-    """Ordena em ordem crescente. Devolve (lista_ordenada, comparacoes, trocas).
-    `chave(item)` extrai a chave de comparacao (padrao: o proprio item).
-    Nao altera a lista recebida."""
     kf = chave if chave is not None else (lambda x: x)
     a = [x for x in itens]
     n = len(a)
     cont = [0, 0]
-    for i in range(n // 2 - 1, -1, -1):          # monta o max-heap
+    for i in range(n // 2 - 1, -1, -1):          
         _descer_max(a, i, n, kf, cont)
-    for fim in range(n - 1, 0, -1):               # leva o maior para o fim
+    for fim in range(n - 1, 0, -1):               
         a[0], a[fim] = a[fim], a[0]
         cont[1] += 1
         _descer_max(a, 0, fim, kf, cont)
@@ -154,9 +125,6 @@ def heapsort(itens, chave=None):
 
 
 def k_menores_com_heap(itens, k, chave=None):
-    """Os k menores itens, em ordem, SEM ordenar tudo: monta um min-heap (O(n)) e
-    extrai k vezes. Devolve (lista_dos_k, comparacoes, trocas); as contagens
-    incluem a montagem do heap."""
     kf = chave if chave is not None else (lambda x: x)
     h = Heap()
     h.construir([(kf(x), x) for x in itens])
@@ -166,11 +134,7 @@ def k_menores_com_heap(itens, k, chave=None):
     return saida, h.comparacoes, h.trocas
 
 
-# ------------------------------------------------------------- verificacao
-# Unico lugar onde a biblioteca padrao (heapq, sorted) aparece: so responde
-# True/False, nao produz nenhum numero do relatorio.
 def verificar_ordem_de_saida(chaves):
-    """Confere, com heapq, se o Heap devolve as chaves na mesma ordem."""
     import heapq
     h = Heap()
     for i, ch in enumerate(chaves):
@@ -185,7 +149,6 @@ def verificar_ordem_de_saida(chaves):
 
 
 def verificar_heapsort(itens):
-    """Confere heapsort e k_menores_com_heap contra sorted()."""
     ordenado, _, _ = heapsort(itens)
     if ordenado != sorted(itens):
         return False
@@ -197,12 +160,11 @@ def verificar_heapsort(itens):
 
 
 if __name__ == "__main__":
-    # Autoteste:  python heap.py
     import random
     random.seed(7)
     falhas = 0
     for n in (0, 1, 2, 3, 10, 50, 240):
-        dados = [random.randint(0, 40) for _ in range(n)]   # com repeticoes
+        dados = [random.randint(0, 40) for _ in range(n)]   
         h = Heap()
         for i, x in enumerate(dados):
             h.inserir(x, i)
