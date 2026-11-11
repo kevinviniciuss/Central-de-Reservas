@@ -714,17 +714,17 @@ def em_breve(titulo, texto):
     return f
 
 MENU = [
-    ("1", "Carregar base de campo", "reservas_protec.json", None, op_carregar),
+    ("1", "Carregar base de campo", "", None, op_carregar),
     ("2", "Cadastrar / editar / remover recurso", "", "cadastro.py",
      em_breve("Recursos", "O cadastro de recursos entra com o módulo cadastro.py.")),
-    ("3", "Registrar pedido de reserva", "valida e avisa conflito", None, op_registrar),
-    ("4", "Agenda por faixa de horário", "BST · AVL · varredura", None, op_agenda),
+    ("3", "Registrar pedido de reserva", "", None, op_registrar),
+    ("4", "Agenda por faixa de horário", "", None, op_agenda),
     ("5", "Consultar disponibilidade de um recurso", "", None, op_disponibilidade),
-    ("6", "Lista de espera", "Fila FIFO · Heap", None, op_espera),
-    ("7", "Desfazer a última operação", "Pilha", None, op_desfazer),
-    ("8", "Índice em disco do histórico", "árvore B", None, op_indice_disco),
-    ("9", "Relatório de desempenho das estruturas", "achados A1 · A2 · A3 · A4", None, op_desempenho),
-    ("10", "Conflito de deslocamento", "extensão B", "opcional",
+    ("6", "Lista de espera", "", None, op_espera),
+    ("7", "Desfazer a última operação", "", None, op_desfazer),
+    ("8", "Índice em disco do histórico", "", None, op_indice_disco),
+    ("9", "Relatório de desempenho das estruturas", "", None, op_desempenho),
+    ("10", "Conflito de deslocamento", "extensão B", "",
      em_breve("Conflito de deslocamento", "Trilha B (trajetoria.py) ainda não iniciada.")),
     ("11", "Gravar relatório em arquivo", "relatorio.txt", None, op_gravar),
     ("0", "Sair", "", None, None),
@@ -740,7 +740,7 @@ def mostrar_menu(sis, mensagem=None):
             if detalhe:
                 linha += "  " + v.c(detalhe, "muted")
         else:
-            linha = "  %s   %s  %s" % (num, v.c(texto, "muted"), v.c("[" + futura + "]", "aviso"))
+            linha = "  %s   %s" % (num, v.c(texto, "muted"))
         print(linha)
     print()
     print(v.c("  " + "─" * (v.largura() - 4), "muted"))

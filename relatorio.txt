@@ -1,0 +1,50 @@
+CENTRAL DE RESERVAS - setor ProTec
+============================================================
+Reservas na base: 75 | instantes distintos (nós): 67
+
+ESTADO ATUAL DAS ÁRVORES (carga em ordem cronológica)
+arv   altura  comp.inserção caminho_médio  rotações   coerente
+BST       67           2451         34.00         0       True
+AVL        7            383          5.21        60       True
+Altura mínima teórica para n = 67: 7
+Percurso em largura: BST 67 níveis (máximo 1 nó por nível) | AVL 7 níveis [1, 2, 4, 8, 16, 32, 4]
+
+ACHADO A1 - DEGENERAÇÃO (tabela 1)
+base       arv   altura  comp.inserção caminho_médio  rotações    nós
+1/3 (25)   BST       22            272         11.50         0     22
+1/3 (25)   AVL        5             91          3.82        17     22
+2/3 (50)   BST       44           1089         22.50         0     44
+2/3 (50)   AVL        6            230          4.70        38     44
+total (75) BST       67           2451         34.00         0     67
+total (75) AVL        7            383          5.21        60     67
+
+CUSTO DA BUSCA (comparações para localizar a chave)
+consulta         instante             BST   AVL
+primeira chave   dom 11/10 17:00        1     6
+chave do meio    seg 19/10 07:00       34     5
+última chave     sab 14/11 15:45       67     7
+inexistente      sab 14/11 15:46       67     7
+
+ACHADO A2 - FAIXA CONTRA VARREDURA (nós visitados)
+faixa                  a partir de   achadas   BST   AVL  varredura
+dia mais movimentado   ter 13/10          9    12    13         75
+dia mais calmo         dom 11/10          1     2     6         75
+primeira semana        dom 11/10         32    30    31         75
+base inteira           dom 11/10         75    67    67         75
+
+ACHADO A3 - ÍNDICE EM DISCO (leituras de página; AVL: 1 nó = 1 página)
+estr.   t  altura  páginas  leit./busca  faixa dia  faixa base
+AVL     -       7       67         5.21         13          67
+B       2       5       62         4.15         12          62
+B       3       4       32         3.58          7          32
+B       5       3       16         2.81          5          16
+B      10       2        7         1.93          3           7
+
+ACHADO A4 - PRIORIDADE (comparações; 75 pedidos)
+k    heap (k menores) heapsort (ordena tudo) heap/tudo
+1                 120                  717      17%
+5                 160                  717      22%
+10                210                  717      29%
+20                305                  717      43%
+Primeiro a sair - Fila FIFO: #1 (prioridade 3) Tarde | Ensaio Coral Unasp
+Primeiro a sair - Heap:      #3 (prioridade 1) Noite 19h00 | Culto do Internato
