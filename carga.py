@@ -16,9 +16,30 @@ def _dia_do_ano(d, m):
 _ORIGEM_DOA = _dia_do_ano(ORIGEM_DIA, ORIGEM_MES)
 
 
+DURACAO_PADRAO = 60   
+
+
+def janela_intervalo(r):
+    """Janela de ocupacao do recurso: da chegada da equipe ate o fim da reserva."""
+    ini = r.get("chegada_equipe")
+    if ini is None:
+        ini = r["inicio"]
+    fim = r["fim"] if r.get("fim") is not None else r["inicio"] + DURACAO_PADRAO
+    return ini, fim
+
+
+def completar_janela(r):
+    """Preenche a coluna 'janela' (minutos entre a chegada da equipe e o fim)."""
+    ini, fim = janela_intervalo(r)
+    r["janela"] = fim - ini
+    return r
+
+
 def carregar_reservas(caminho="reservas_protec.json"):
     with open(caminho, encoding="utf-8") as f:
         base = json.load(f)
+    for r in base["reservas"]:
+        completar_janela(r)
     return sorted(base["reservas"], key=lambda r: (r["inicio"], r["id"])), base
 
 

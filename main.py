@@ -1,11 +1,14 @@
 import os
 import sys
 
+import cadastro
 import visual as v
 from tads import Fila, Pilha
 from heap import Heap
 from carga import (carregar_reservas, gravar_reservas, carregar_na_arvore,
-                   carregar_na_arvoreb, GRAU_B, para_minutos, rotulo, hora, prioridade, PRIORIDADES)
+                   carregar_na_arvoreb, GRAU_B, para_minutos, rotulo, hora, prioridade, PRIORIDADES,
+                   janela_intervalo, completar_janela)
+import malha
 import relatorio
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
@@ -152,13 +155,15 @@ def tela(sis, titulo, passo=None, total=None, resumo=None, destino1="ao menu"):
 
 
 def tabela_reservas(rs):
-    larg_desc = max(16, v.largura() - 45)
+    larg_desc = max(12, v.largura() - 58)
     linhas = []
     for r in rs:
         fim = hora(r["fim"]) if r["fim"] is not None else v.c("?", "muted")
-        linhas.append([v.c("#%d" % r["id"], "muted"), rotulo(r["inicio"]), fim,
+        ji, jf = janela_intervalo(r)
+        janela = "%s-%s" % (hora(ji), hora(jf))
+        linhas.append([v.c("#%d" % r["id"], "muted"), rotulo(r["inicio"]), fim, janela,
                        v.cor_recurso(r["recurso"]), v.cortar(r["descricao"], larg_desc)])
-    v.tabela(["id", "início", "fim", "recurso", "descrição"], linhas, ["r", "l", "l", "l", "l"])
+    v.tabela(["id", "início", "fim", "janela", "recurso", "descrição"], linhas, ["r", "l", "l", "l", "l", "l"])
 
 
 def pedir_instante(rotulo_campo):
@@ -297,6 +302,7 @@ def op_registrar(sis):
     nova = {"id": sis.proximo_id(), "recurso": rec, "local": local, "descricao": desc,
             "data": None, "data_fim_periodo": None, "chegada_equipe": None,
             "inicio": ini, "fim": fim, "duracao": fim - ini, "status": status}
+    completar_janela(nova)
     sis.inserir_ordenado(nova)
     sis.bst.inserir(ini, nova)
     sis.avl.inserir(ini, nova)
@@ -374,6 +380,60 @@ def op_agenda(sis):
     print("  " + v.c(nome, "bold", estilo) + " visitou " + v.c(visitados, "bold", "branco") + " " + unidade
           + v.c("  de %d na base" % sis.bst.n_reservas, "muted"))
     print("  " + v.barra(visitados, sis.bst.n_reservas, 30, "bst" if estilo == "bst" else ("avl" if estilo == "avl" else "muted")))
+    v.pausa()
+
+
+def op_malha(sis):
+    T, total = "Malha de trechos do recurso", 2
+
+    def p_rec(vals):
+        tela(sis, T, 1, total)
+        return escolher_recurso(sis)
+
+    def p_dia(vals):
+        tela(sis, T, 2, total, [("Recurso", sis.nome_recurso(vals[0]))])
+        while True:
+            txt = v.ler("Dia", "dd/mm/aaaa · 0 volta · vazio cancela")
+            if txt == "0":
+                return VOLTAR
+            if txt == "":
+                return None
+            try:
+                return para_minutos(txt + " 00:00") // 1440
+            except ValueError:
+                v.erro("Use o formato dd/mm/aaaa (ex.: 13/10/2026).")
+
+    vals = percorrer([p_rec, p_dia])
+    if vals is VOLTAR:
+        return
+    if vals is None:
+        return cancelado(sis)
+    rec, dia = vals
+    trechos = malha.malha_dia(sis.reservas, rec, dia)
+    res = malha.resumo(trechos)
+    tela(sis, T, resumo=[("Recurso", sis.nome_recurso(rec)), ("Dia", rotulo(dia * 1440)[:9]),
+                         ("Trecho", "%d min" % malha.PASSO)])
+    por_id = {r["id"]: r for r in sis.reservas}
+    larg_desc = max(12, v.largura() - 26)
+    simbolo = {"uso": v.cor_recurso(rec, "██"), "prep": v.c("▒▒", "aviso"), "livre": v.c("░░", "muted")}
+    for i in range(0, len(trechos), 2):
+        par = trechos[i:i + 2]
+        ids = []
+        for t in par:
+            for id_ in t["ids"]:
+                if id_ not in ids:
+                    ids.append(id_)
+        txt = "  ".join("#%d %s" % (k, por_id[k]["descricao"]) for k in ids)
+        print("  " + v.c(hora(par[0]["de"]), "muted") + "  " + " ".join(simbolo[t["estado"]] for t in par)
+              + "  " + v.cortar(txt, larg_desc))
+    print()
+    print("  " + simbolo["uso"] + " em uso   " + simbolo["prep"] + " preparo da equipe   "
+          + simbolo["livre"] + " livre")
+    print()
+    v.info("%s trechos livres · %s em uso · %s em preparo · ocupação %s" % (
+        v.c(res["livre"], "bold", "ok"), v.c(res["uso"], "bold", "branco"),
+        v.c(res["prep"], "bold", "aviso"), v.c("%.0f%%" % res["ocupacao"], "bold", "branco")))
+    v.info("Reservas em espera não ocupam a malha.")
     v.pausa()
 
 
@@ -713,10 +773,13 @@ def em_breve(titulo, texto):
         v.pausa()
     return f
 
+def op_cadastro(sis):
+    cadastro.menu()
+
+
 MENU = [
     ("1", "Carregar base de campo", "", None, op_carregar),
-    ("2", "Cadastrar / editar / remover recurso", "", "cadastro.py",
-     em_breve("Recursos", "O cadastro de recursos entra com o módulo cadastro.py.")),
+    ("2", "Cadastrar / editar / remover recurso", "inventário de recursos", None, op_cadastro),
     ("3", "Registrar pedido de reserva", "", None, op_registrar),
     ("4", "Agenda por faixa de horário", "", None, op_agenda),
     ("5", "Consultar disponibilidade de um recurso", "", None, op_disponibilidade),
@@ -727,6 +790,7 @@ MENU = [
     ("10", "Conflito de deslocamento", "extensão B", "",
      em_breve("Conflito de deslocamento", "Trilha B (trajetoria.py) ainda não iniciada.")),
     ("11", "Gravar relatório em arquivo", "relatorio.txt", None, op_gravar),
+    ("12", "Malha de trechos do recurso", "grade do dia por janela", None, op_malha),
     ("0", "Sair", "", None, None),
 ]
 

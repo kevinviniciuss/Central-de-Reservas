@@ -12,7 +12,8 @@
    "chegada_equipe": 990,
    "inicio": 1020,
    "fim": 1095,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 2,
@@ -24,7 +25,8 @@
    "chegada_equipe": 2550,
    "inicio": 2580,
    "fim": 2655,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 3,
@@ -36,7 +38,8 @@
    "chegada_equipe": 2540,
    "inicio": 2585,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 105
   },
   {
    "id": 4,
@@ -48,7 +51,8 @@
    "chegada_equipe": 3510,
    "inicio": 3525,
    "fim": 3615,
-   "duracao": 90
+   "duracao": 90,
+   "janela": 105
   },
   {
    "id": 5,
@@ -60,7 +64,8 @@
    "chegada_equipe": 3270,
    "inicio": 3300,
    "fim": 3480,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 210
   },
   {
    "id": 6,
@@ -72,7 +77,8 @@
    "chegada_equipe": 4110,
    "inicio": 4140,
    "fim": 4260,
-   "duracao": 120
+   "duracao": 120,
+   "janela": 150
   },
   {
    "id": 7,
@@ -84,7 +90,8 @@
    "chegada_equipe": 3930,
    "inicio": 3960,
    "fim": 4200,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 270
   },
   {
    "id": 8,
@@ -96,7 +103,8 @@
    "chegada_equipe": 3960,
    "inicio": 4020,
    "fim": 4260,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 300
   },
   {
    "id": 9,
@@ -108,7 +116,8 @@
    "chegada_equipe": 3285,
    "inicio": 3300,
    "fim": 3360,
-   "duracao": 60
+   "duracao": 60,
+   "janela": 75
   },
   {
    "id": 10,
@@ -120,7 +129,8 @@
    "chegada_equipe": 4005,
    "inicio": 4025,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 80
   },
   {
    "id": 11,
@@ -132,7 +142,8 @@
    "chegada_equipe": 3640,
    "inicio": 3665,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 85
   },
   {
    "id": 12,
@@ -144,7 +155,8 @@
    "chegada_equipe": 4245,
    "inicio": 4265,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 80
   },
   {
    "id": 13,
@@ -156,7 +168,8 @@
    "chegada_equipe": 5430,
    "inicio": 5460,
    "fim": 5535,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 14,
@@ -168,7 +181,8 @@
    "chegada_equipe": 5070,
    "inicio": 5100,
    "fim": 5280,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 210
   },
   {
    "id": 15,
@@ -180,7 +194,8 @@
    "chegada_equipe": 5420,
    "inicio": 5460,
    "fim": 5640,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 220
   },
   {
    "id": 16,
@@ -192,7 +207,8 @@
    "chegada_equipe": 5100,
    "inicio": 5130,
    "fim": 5370,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 270
   },
   {
    "id": 17,
@@ -204,7 +220,8 @@
    "chegada_equipe": 4800,
    "inicio": 4860,
    "fim": 5040,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 240
   },
   {
    "id": 18,
@@ -216,7 +233,8 @@
    "chegada_equipe": 6860,
    "inicio": 6900,
    "fim": 6990,
-   "duracao": 90
+   "duracao": 90,
+   "janela": 130
   },
   {
    "id": 19,
@@ -228,7 +246,8 @@
    "chegada_equipe": 6570,
    "inicio": 6600,
    "fim": 6900,
-   "duracao": 300
+   "duracao": 300,
+   "janela": 330
   },
   {
    "id": 20,
@@ -240,7 +259,8 @@
    "chegada_equipe": 6140,
    "inicio": 6180,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 100
   },
   {
    "id": 21,
@@ -252,7 +272,8 @@
    "chegada_equipe": 6210,
    "inicio": 6240,
    "fim": 6510,
-   "duracao": 270
+   "duracao": 270,
+   "janela": 300
   },
   {
    "id": 22,
@@ -264,7 +285,8 @@
    "chegada_equipe": 6500,
    "inicio": 6510,
    "fim": 6600,
-   "duracao": 90
+   "duracao": 90,
+   "janela": 100
   },
   {
    "id": 23,
@@ -276,7 +298,8 @@
    "chegada_equipe": 6870,
    "inicio": 6900,
    "fim": 7140,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 270
   },
   {
    "id": 24,
@@ -288,7 +311,8 @@
    "chegada_equipe": 6540,
    "inicio": 6570,
    "fim": 6810,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 270
   },
   {
    "id": 25,
@@ -300,7 +324,8 @@
    "chegada_equipe": 6240,
    "inicio": 6300,
    "fim": 6480,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 240
   },
   {
    "id": 26,
@@ -312,7 +337,8 @@
    "chegada_equipe": 7605,
    "inicio": 7620,
    "fim": 7680,
-   "duracao": 60
+   "duracao": 60,
+   "janela": 75
   },
   {
    "id": 27,
@@ -324,7 +350,8 @@
    "chegada_equipe": 7680,
    "inicio": 7740,
    "fim": 7980,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 300
   },
   {
    "id": 28,
@@ -336,7 +363,8 @@
    "chegada_equipe": 8130,
    "inicio": 8220,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 150
   },
   {
    "id": 29,
@@ -348,7 +376,8 @@
    "chegada_equipe": 9560,
    "inicio": 9585,
    "fim": 9705,
-   "duracao": 120
+   "duracao": 120,
+   "janela": 145
   },
   {
    "id": 30,
@@ -360,7 +389,8 @@
    "chegada_equipe": 9180,
    "inicio": 9225,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 105
   },
   {
    "id": 31,
@@ -372,7 +402,8 @@
    "chegada_equipe": 9780,
    "inicio": 9810,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 90
   },
   {
    "id": 32,
@@ -384,7 +415,8 @@
    "chegada_equipe": 9750,
    "inicio": 9780,
    "fim": 9900,
-   "duracao": 120
+   "duracao": 120,
+   "janela": 150
   },
   {
    "id": 33,
@@ -396,7 +428,8 @@
    "chegada_equipe": 10800,
    "inicio": 10860,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 120
   },
   {
    "id": 34,
@@ -408,7 +441,8 @@
    "chegada_equipe": 11070,
    "inicio": 11100,
    "fim": 11175,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 35,
@@ -420,7 +454,8 @@
    "chegada_equipe": 10830,
    "inicio": 10860,
    "fim": 11040,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 210
   },
   {
    "id": 36,
@@ -432,7 +467,8 @@
    "chegada_equipe": 11205,
    "inicio": 11250,
    "fim": 11400,
-   "duracao": 150
+   "duracao": 150,
+   "janela": 195
   },
   {
    "id": 37,
@@ -444,7 +480,8 @@
    "chegada_equipe": 10470,
    "inicio": 10500,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 90
   },
   {
    "id": 38,
@@ -456,7 +493,8 @@
    "chegada_equipe": 12630,
    "inicio": 12660,
    "fim": 12735,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 39,
@@ -468,7 +506,8 @@
    "chegada_equipe": 12260,
    "inicio": 12300,
    "fim": 12600,
-   "duracao": 300
+   "duracao": 300,
+   "janela": 340
   },
   {
    "id": 40,
@@ -480,7 +519,8 @@
    "chegada_equipe": 11910,
    "inicio": 11940,
    "fim": 12270,
-   "duracao": 330
+   "duracao": 330,
+   "janela": 360
   },
   {
    "id": 41,
@@ -492,7 +532,8 @@
    "chegada_equipe": 12645,
    "inicio": 12665,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 80
   },
   {
    "id": 42,
@@ -504,7 +545,8 @@
    "chegada_equipe": 12280,
    "inicio": 12305,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 85
   },
   {
    "id": 43,
@@ -516,7 +558,8 @@
    "chegada_equipe": 12885,
    "inicio": 12905,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 80
   },
   {
    "id": 44,
@@ -528,7 +571,8 @@
    "chegada_equipe": 12630,
    "inicio": 12660,
    "fim": 12900,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 270
   },
   {
    "id": 45,
@@ -540,7 +584,8 @@
    "chegada_equipe": 11925,
    "inicio": 11940,
    "fim": 12000,
-   "duracao": 60
+   "duracao": 60,
+   "janela": 75
   },
   {
    "id": 46,
@@ -552,7 +597,8 @@
    "chegada_equipe": 14100,
    "inicio": 14190,
    "fim": 14340,
-   "duracao": 150
+   "duracao": 150,
+   "janela": 240
   },
   {
    "id": 47,
@@ -564,7 +610,8 @@
    "chegada_equipe": 13590,
    "inicio": 13605,
    "fim": 13695,
-   "duracao": 90
+   "duracao": 90,
+   "janela": 105
   },
   {
    "id": 48,
@@ -576,7 +623,8 @@
    "chegada_equipe": 14060,
    "inicio": 14100,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 100
   },
   {
    "id": 49,
@@ -588,7 +636,8 @@
    "chegada_equipe": 15150,
    "inicio": 15180,
    "fim": 15360,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 210
   },
   {
    "id": 50,
@@ -600,7 +649,8 @@
    "chegada_equipe": 15510,
    "inicio": 15540,
    "fim": 15615,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 51,
@@ -612,7 +662,8 @@
    "chegada_equipe": 14790,
    "inicio": 14820,
    "fim": 15000,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 210
   },
   {
    "id": 52,
@@ -624,7 +675,8 @@
    "chegada_equipe": 15540,
    "inicio": 15540,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 60
   },
   {
    "id": 53,
@@ -636,7 +688,8 @@
    "chegada_equipe": 16965,
    "inicio": 17010,
    "fim": 17070,
-   "duracao": 60
+   "duracao": 60,
+   "janela": 105
   },
   {
    "id": 54,
@@ -648,7 +701,8 @@
    "chegada_equipe": 16320,
    "inicio": 16365,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 105
   },
   {
    "id": 55,
@@ -660,7 +714,8 @@
    "chegada_equipe": 19260,
    "inicio": 19305,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 105
   },
   {
    "id": 56,
@@ -672,7 +727,8 @@
    "chegada_equipe": 21150,
    "inicio": 21180,
    "fim": 21255,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 57,
@@ -684,7 +740,8 @@
    "chegada_equipe": 22710,
    "inicio": 22740,
    "fim": 22815,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 58,
@@ -696,7 +753,8 @@
    "chegada_equipe": 22740,
    "inicio": 22770,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 90
   },
   {
    "id": 59,
@@ -708,7 +766,8 @@
    "chegada_equipe": 22725,
    "inicio": 22745,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 80
   },
   {
    "id": 60,
@@ -720,7 +779,8 @@
    "chegada_equipe": 22360,
    "inicio": 22385,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 85
   },
   {
    "id": 61,
@@ -732,7 +792,8 @@
    "chegada_equipe": 22965,
    "inicio": 22985,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 80
   },
   {
    "id": 62,
@@ -744,7 +805,8 @@
    "chegada_equipe": 22710,
    "inicio": 22740,
    "fim": 22980,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 270
   },
   {
    "id": 63,
@@ -756,7 +818,8 @@
    "chegada_equipe": 22005,
    "inicio": 22020,
    "fim": 22080,
-   "duracao": 60
+   "duracao": 60,
+   "janela": 75
   },
   {
    "id": 64,
@@ -768,7 +831,8 @@
    "chegada_equipe": 23670,
    "inicio": 23685,
    "fim": 23775,
-   "duracao": 90
+   "duracao": 90,
+   "janela": 105
   },
   {
    "id": 65,
@@ -780,7 +844,8 @@
    "chegada_equipe": 25590,
    "inicio": 25620,
    "fim": 25695,
-   "duracao": 75
+   "duracao": 75,
+   "janela": 105
   },
   {
    "id": 66,
@@ -792,7 +857,8 @@
    "chegada_equipe": 25230,
    "inicio": 25260,
    "fim": 25440,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 210
   },
   {
    "id": 67,
@@ -804,7 +870,8 @@
    "chegada_equipe": 24960,
    "inicio": 25005,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 105
   },
   {
    "id": 68,
@@ -816,7 +883,8 @@
    "chegada_equipe": 26670,
    "inicio": 26700,
    "fim": 27000,
-   "duracao": 300
+   "duracao": 300,
+   "janela": 330
   },
   {
    "id": 69,
@@ -828,7 +896,8 @@
    "chegada_equipe": 29340,
    "inicio": 29385,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 105
   },
   {
    "id": 70,
@@ -840,7 +909,8 @@
    "chegada_equipe": 41460,
    "inicio": 41520,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 120
   },
   {
    "id": 71,
@@ -852,7 +922,8 @@
    "chegada_equipe": 42150,
    "inicio": 42180,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 90
   },
   {
    "id": 72,
@@ -864,7 +935,8 @@
    "chegada_equipe": 42510,
    "inicio": 42540,
    "fim": null,
-   "duracao": null
+   "duracao": null,
+   "janela": 90
   },
   {
    "id": 73,
@@ -876,7 +948,8 @@
    "chegada_equipe": 44310,
    "inicio": 44340,
    "fim": 44580,
-   "duracao": 240
+   "duracao": 240,
+   "janela": 270
   },
   {
    "id": 74,
@@ -888,7 +961,8 @@
    "chegada_equipe": 45390,
    "inicio": 45420,
    "fim": 45600,
-   "duracao": 180
+   "duracao": 180,
+   "janela": 210
   },
   {
    "id": 75,
@@ -900,7 +974,8 @@
    "chegada_equipe": 49880,
    "inicio": 49905,
    "fim": 50025,
-   "duracao": 120
+   "duracao": 120,
+   "janela": 145
   }
  ]
 }
